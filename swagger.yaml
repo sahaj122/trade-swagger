@@ -56,6 +56,60 @@ paths:
                 status: "fail"
                 message: "Invalid credentials"
                 data: null
+  /api/v1/distributor/getDistributorProfile:
+    get:
+      summary: Fetch distributor profile
+      tags:
+        - distributor
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Distributor profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      distributorProfile:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          dist_name:
+                            type: string
+                          dist_username:
+                            type: string
+                          dist_dealer_count:
+                            type: integer
+                          deleted_at:
+                            type: string
+                            nullable: true
+                          createdAt:
+                            type: string
+                            format: date-time
+                          updatedAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                message: Distributor profile fetched successfully
+                data:
+                  distributorProfile:
+                    id: 1
+                    dist_name: sahaj
+                    dist_username: sahaj123
+                    dist_dealer_count: 0
+                    deleted_at: null
+                    createdAt: "2025-08-11T10:45:48.586Z"
+                    updatedAt: "2025-08-11T10:45:48.586Z"
   /api/v1/distributor/getAllDealers:
     get:
       summary: get all dealers
@@ -856,6 +910,102 @@ paths:
                 status: "fail"
                 message: "Invalid token. Please login again."
                 data: null
+  /api/v1/dealer/getDealerProfile:
+    get:
+      summary: Fetch dealer profile
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Dealer profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      dealerProfile:
+                        type: object
+                        properties:
+                          dealer_id:
+                            type: integer
+                          dealer_name:
+                            type: string
+                          dealer_username:
+                            type: string
+                          dealer_contact:
+                            type: string
+                            nullable: true
+                          status:
+                            type: boolean
+                          plan_start_date:
+                            type: string
+                            format: date-time
+                          plan_end_date:
+                            type: string
+                            format: date-time
+                          plan_price:
+                            type: integer
+                          plan_id:
+                            type: integer
+                          max_clients_allowed:
+                            type: integer
+                          subscribed_plans:
+                            type: array
+                            items:
+                              type: object # Defined as object to allow for future plan details
+                          createdAt:
+                            type: string
+                            format: date-time
+                          updatedAt:
+                            type: string
+                            format: date-time
+                          plan:
+                            type: object
+                            properties:
+                              plan_name:
+                                type: string
+                              exchanges_allowed:
+                                type: array
+                                items:
+                                  type: string
+                              status:
+                                type: string
+                              plan_amount:
+                                type: string
+              example:
+                status: success
+                message: Dealer profile fetched successfully
+                data:
+                  dealerProfile:
+                    dealer_id: 1
+                    dealer_name: Raj
+                    dealer_username: raj123
+                    dealer_contact: null
+                    status: false
+                    plan_start_date: "2026-03-19T00:00:00.000Z"
+                    plan_end_date: "2026-05-19T00:00:00.000Z"
+                    plan_price: 30000
+                    plan_id: 1
+                    max_clients_allowed: 10
+                    subscribed_plans: []
+                    createdAt: "2025-08-11T10:46:52.224Z"
+                    updatedAt: "2026-04-14T10:39:49.822Z"
+                    plan:
+                      plan_name: basic
+                      exchanges_allowed:
+                        - MCX_FUTURE
+                        - NSE_FUTURE
+                      status: active
+                      plan_amount: "10000.00"
   /api/v1/dealer/createClient:
     post:
       summary: create client
@@ -1849,6 +1999,144 @@ paths:
                     status: "fail"
                     message: "Naked option selling is not allowed for this account."
                     data: null
+  /api/v1/client/getClientProfile:
+    get:
+      summary: Fetch client profile
+      tags:
+        - client
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Client profile fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      clientProfile:
+                        type: object
+                        properties:
+                          client_id:
+                            type: integer
+                          client_name:
+                            type: string
+                          client_username:
+                            type: string
+                          client_contact:
+                            type: string
+                          client_balance:
+                            type: integer
+                          client_status:
+                            type: boolean
+                          total_max_lots_allowed_future:
+                            type: integer
+                          total_standing_lots_future:
+                            type: integer
+                          total_max_lots_allowed_options:
+                            type: integer
+                          total_standing_lots_options:
+                            type: integer
+                          auto_square_off_balance:
+                            type: integer
+                          jobbing_allowed:
+                            type: boolean
+                          jobbing_time_position:
+                            type: integer
+                          commission_per_crore_mcx:
+                            type: integer
+                          commission_per_crore_nse:
+                            type: integer
+                          commission_per_lot:
+                            type: integer
+                          allow_stop_loss_above_high_low:
+                            type: boolean
+                          allow_limit_orders:
+                            type: boolean
+                          allow_limit_orders_above_high_low:
+                            type: boolean
+                          allow_position_carry_nse:
+                            type: boolean
+                          allow_position_carry_option:
+                            type: boolean
+                          allow_position_carry_mcx:
+                            type: boolean
+                          opition_selling_allowed:
+                            type: boolean
+                          client_dealer_id:
+                            type: integer
+                          c_created_at:
+                            type: string
+                            format: date-time
+                          c_updated_at:
+                            type: string
+                            format: date-time
+                          deleted_at:
+                            type: string
+                            nullable: true
+                          dealer:
+                            type: object
+                            properties:
+                              dealer_name:
+                                type: string
+                              plan:
+                                type: object
+                                properties:
+                                  plan_name:
+                                    type: string
+                                  exchanges_allowed:
+                                    type: array
+                                    items:
+                                      type: string
+                                  status:
+                                    type: string
+              example:
+                status: success
+                message: Client profile fetched successfully
+                data:
+                  clientProfile:
+                    client_id: 13
+                    client_name: vijay
+                    client_username: vijay123
+                    client_contact: "9876543210"
+                    client_balance: 0
+                    client_status: true
+                    total_max_lots_allowed_future: 10
+                    total_standing_lots_future: 0
+                    total_max_lots_allowed_options: 25
+                    total_standing_lots_options: 0
+                    auto_square_off_balance: -1000
+                    jobbing_allowed: true
+                    jobbing_time_position: 0
+                    commission_per_crore_mcx: 0
+                    commission_per_crore_nse: 0
+                    commission_per_lot: 20
+                    allow_stop_loss_above_high_low: true
+                    allow_limit_orders: false
+                    allow_limit_orders_above_high_low: true
+                    allow_position_carry_nse: true
+                    allow_position_carry_option: true
+                    allow_position_carry_mcx: true
+                    opition_selling_allowed: false
+                    client_dealer_id: 1
+                    c_created_at: "2026-03-21T17:17:39.654Z"
+                    c_updated_at: "2026-03-21T17:17:39.655Z"
+                    deleted_at: null
+                    dealer:
+                      dealer_name: Raj
+                      plan:
+                        plan_name: basic
+                        exchanges_allowed:
+                          - MCX_FUTURE
+                          - NSE_FUTURE
+                        status: active
   /api/v1/client/placeLimitOrder:
     post:
       summary: place limit order
