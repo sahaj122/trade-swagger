@@ -839,6 +839,127 @@ paths:
                 status: "fail"
                 message: "Invalid token. Please login again."
                 data: null
+  /api/v1/distributor/createSubscriptionPlan:
+    post:
+      summary: Create a new subscription plan
+      tags:
+        - distributor
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - plan_name
+                - plan_amount
+                - exchanges_allowed
+              properties:
+                plan_name:
+                  type: string
+                  description: "Must be unique"
+                plan_amount:
+                  type: number
+                  format: float
+                status:
+                  type: string
+                  enum: [ active, inactive ]
+                  default: active
+                exchanges_allowed:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      - MCX_FUTURE
+                      - MCX_OPTION
+                      - NSE_FUTURE
+                      - NSE_OPTION
+                      - COMEX_FUTURE
+                      - COMEX_OPTION
+                      - NCD_FUTURE
+                      - NCD_OPTION
+                      - CRYPTO_FUTURE
+                      - CRYPTO_OPTION
+                      - FOREX_FUTURE
+                      - FOREX_OPTION
+            example:
+              plan_name: "NSE ALL"
+              plan_amount: 10000
+              status: "active"
+              exchanges_allowed: [ "MCX_FUTURE", "NSE_FUTURE", "NSE_OPTION", "MCX_OPTION", "NCD_FUTURE" ]
+      responses:
+        "200":
+          description: Subscription Plan Created Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      plan_name:
+                        type: string
+                      plan_amount:
+                        type: string
+                      status:
+                        type: string
+                      exchanges_allowed:
+                        type: array
+                        items:
+                          type: string
+                      updatedAt:
+                        type: string
+                        format: date-time
+                      createdAt:
+                        type: string
+                        format: date-time
+                      deleted_at:
+                        type: string
+                        nullable: true
+              example:
+                status: "success"
+                message: "Subcription Plan Created Successfully"
+                data:
+                  id: 8
+                  plan_name: "NSE ALL"
+                  plan_amount: "10000.00"
+                  status: "active"
+                  exchanges_allowed:
+                    - MCX_FUTURE
+                    - NSE_FUTURE
+                    - NSE_OPTION
+                    - MCX_OPTION
+                    - NCD_FUTURE
+                  updatedAt: "2026-04-21T16:35:48.102Z"
+                  createdAt: "2026-04-21T16:35:48.102Z"
+                  deleted_at: null
+        "400":
+          description: Failed to create plan (e.g., validation error)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: "fail"
+                message: "plan_name must be unique"
+                data: null
   /api/v1/dealer/getAllClients:
     get:
       summary: get all clients
