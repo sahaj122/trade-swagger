@@ -37,7 +37,10 @@ paths:
                 status: "success"
                 message: "Distributor login successfull"
                 data:
-                  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzYWhhajEyMyIsInJvbGUiOiJkaXN0cmlidXRvciIsImlhdCI6MTc2OTQxODczNCwiZXhwIjoxNzY5NTA1MTM0fQ.0xRYrLeHlKab48fTYjaecHyZuURR75mKYPiB41m2S3M"
+                  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJzYWhhaj\
+                    EyMyIsInJvbGUiOiJkaXN0cmlidXRvciIsImlhdCI6MTc2OTQxODczNCwiZ\
+                    XhwIjoxNzY5NTA1MTM0fQ.0xRYrLeHlKab48fTYjaecHyZuURR75mKYPiB4\
+                    1m2S3M"
                   distributor:
                     id: 1
                     dist_name: "sahaj"
@@ -313,7 +316,7 @@ paths:
               status: false
               plan_price: 30000
               max_clients_allowed: 10
-              subscribed_plans: ["NSE_FUTURE", "MCX_OPTION"]
+              subscribed_plans: [ "NSE_FUTURE", "MCX_OPTION" ]
       responses:
         "200":
           description: Dealer updated successfully
@@ -856,7 +859,6 @@ paths:
   /api/v1/dealer/createClient:
     post:
       summary: create client
-      responses: {}
       tags:
         - dealer
       security:
@@ -886,7 +888,6 @@ paths:
                   format: password
                 client_contact:
                   type: string
-                  format: utc-millisec
                 client_balance:
                   type: integer
                 status:
@@ -930,6 +931,106 @@ paths:
               jobbing_time_position: 15
               allow_limit_orders: true
               opition_selling_allowed: false
+      responses:
+        "200":
+          description: Client created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      c_created_at:
+                        type: string
+                        format: date-time
+                      c_updated_at:
+                        type: string
+                        format: date-time
+                      client_balance:
+                        type: integer
+                      client_status:
+                        type: boolean
+                      total_max_lots_allowed_future:
+                        type: integer
+                      total_standing_lots_future:
+                        type: integer
+                      total_max_lots_allowed_options:
+                        type: integer
+                      total_standing_lots_options:
+                        type: integer
+                      auto_square_off_balance:
+                        type: integer
+                      jobbing_allowed:
+                        type: boolean
+                      jobbing_time_position:
+                        type: integer
+                      commission_per_crore_mcx:
+                        type: integer
+                      commission_per_crore_nse:
+                        type: integer
+                      commission_per_lot:
+                        type: integer
+                      allow_stop_loss_above_high_low:
+                        type: boolean
+                      allow_limit_orders:
+                        type: boolean
+                      allow_limit_orders_above_high_low:
+                        type: boolean
+                      allow_position_carry_nse:
+                        type: boolean
+                      allow_position_carry_option:
+                        type: boolean
+                      allow_position_carry_mcx:
+                        type: boolean
+                      opition_selling_allowed:
+                        type: boolean
+                      client_id:
+                        type: integer
+                      client_name:
+                        type: string
+                      client_username:
+                        type: string
+                      client_contact:
+                        type: string
+                      deleted_at:
+                        type: string
+                        nullable: true
+              example:
+                status: success
+                message: Client created successfully!
+                data:
+                  c_created_at: "2026-04-21T13:49:06.562Z"
+                  c_updated_at: "2026-04-21T13:49:06.562Z"
+                  client_balance: 0
+                  client_status: true
+                  total_max_lots_allowed_future: 10
+                  total_standing_lots_future: 0
+                  total_max_lots_allowed_options: 25
+                  total_standing_lots_options: 0
+                  auto_square_off_balance: -1000
+                  jobbing_allowed: true
+                  jobbing_time_position: 0
+                  commission_per_crore_mcx: 0
+                  commission_per_crore_nse: 0
+                  commission_per_lot: 20
+                  allow_stop_loss_above_high_low: true
+                  allow_limit_orders: false
+                  allow_limit_orders_above_high_low: true
+                  allow_position_carry_nse: true
+                  allow_position_carry_option: true
+                  allow_position_carry_mcx: true
+                  opition_selling_allowed: false
+                  client_id: 16
+                  client_name: "abhbi"
+                  client_username: "abhi321"
+                  client_contact: "9876543210"
+                  deleted_at: null
   /api/v1/dealer/updateClientDetails/{username}:
     patch:
       summary: update client details
@@ -983,7 +1084,7 @@ paths:
               client_contact: "9876543210"
               client_balance: 75000.0
               client_status: true
-              auto_square_off_balance: -5000.0
+              auto_square_off_balance: -5000
               total_max_lots_allowed_future: 30.0
               total_max_lots_allowed_options: 100.0
               commission_per_lot: 20.0
@@ -1181,7 +1282,8 @@ paths:
                       order_limit_price: null
                       order_stop_loss_price: null
                       order_status: "REJECTED"
-                      orderMessage: "Naked option selling is not allowed for this account (Resulting position would be Short)."
+                      orderMessage: "Naked option selling is not allowed for this account (Resulting
+                        position would be Short)."
                       order_created_at: "2026-01-27T11:35:50.183Z"
                       order_updated_at: "2026-01-27T11:35:50.183Z"
         "404":
@@ -1565,18 +1667,18 @@ paths:
             example:
               settings:
                 NSE_STOCK_FUTURES:
-                  expiries: ["JANUARY_2026", "FEBRUARY_2026"]
+                  expiries: [ "JANUARY_2026", "FEBRUARY_2026" ]
                 NSE_INDEX_OPTIONS:
                   symbols:
                     NIFTY:
                       types:
-                        Weekly: ["03-FEB-2026", "10-FEB-2026"]
-                        Monthly: ["JANUARY_2026", "FEBRUARY_2026"]
+                        Weekly: [ "03-FEB-2026", "10-FEB-2026" ]
+                        Monthly: [ "JANUARY_2026", "FEBRUARY_2026" ]
                 MCX_FUTURES:
                   symbols:
                     GOLD:
                       types:
-                        Monthly: ["FEBRUARY_2026", "APRIL_2026"]
+                        Monthly: [ "FEBRUARY_2026", "APRIL_2026" ]
       responses:
         "200":
           description: Instrument permissions saved successfully
@@ -1649,7 +1751,8 @@ paths:
                 status: "success"
                 message: "signedUrl received successfully."
                 data:
-                  downloadUrl: "https://trade-reports-archive.r2.cloudflarestorage.com/monthly/..."
+                  downloadUrl: "https://trade-reports-archive.r2.cloudflarestorage.com/monthly/..\
+                    ."
         "401":
           description: Report not found or access denied
           content:
@@ -1675,7 +1778,8 @@ paths:
                 message: "Instrument list download link"
                 data:
                   version: "202601171708"
-                  url: "https://pub-d913587b970544a7b4bfd914ab850604.r2.dev/public/instruments.zip"
+                  url: "https://pub-d913587b970544a7b4bfd914ab850604.r2.dev/public/instruments.zi\
+                    p"
                   force_update: false
   /api/v1/client/placeMarketOrder:
     post:
@@ -1700,7 +1804,7 @@ paths:
                   type: number
                 side:
                   type: string
-                  enum: [buy, sell]
+                  enum: [ buy, sell ]
             example:
               instrument_key: "MCX_FO|449534"
               total_lots: 1.0
@@ -1769,7 +1873,7 @@ paths:
                   type: number
                 side:
                   type: string
-                  enum: [buy, sell]
+                  enum: [ buy, sell ]
                 limit_price:
                   type: number
             example:
@@ -1809,7 +1913,8 @@ paths:
             application/json:
               example:
                 status: "fail"
-                message: "Missing required parameters: instrument_key, total_lots, side, limit_price"
+                message: "Missing required parameters: instrument_key, total_lots, side,
+                  limit_price"
                 data: null
   /api/v1/client/modifyLimitOrder/{orderId}:
     put:
@@ -1974,7 +2079,8 @@ paths:
             application/json:
               example:
                 status: "fail"
-                message: "Missing required parameters: instrument_key, total_lots, stop_loss_price"
+                message: "Missing required parameters: instrument_key, total_lots,
+                  stop_loss_price"
                 data: null
   /api/v1/client/modifyStopLossOrder/{orderId}:
     put:
@@ -2283,7 +2389,8 @@ paths:
                 message: "Instrument list download link"
                 data:
                   version: "202601171708"
-                  url: "https://pub-d913587b970544a7b4bfd914ab850604.r2.dev/public/instruments.zip"
+                  url: "https://pub-d913587b970544a7b4bfd914ab850604.r2.dev/public/instruments.zi\
+                    p"
                   force_update: false
   /api/v1/watchlist/addItem:
     post:
