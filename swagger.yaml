@@ -2032,6 +2032,98 @@ paths:
                 status: "fail"
                 message: "Report not found or access denied."
                 data: null
+  /api/v1/dealer/updateMultipleClientsRules:
+    put:
+      summary: Update instrument rules for multiple clients
+      description: Bulk update heterogeneous trading rules (Futures/Options) for a list of client IDs.
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - client_ids
+                - rules
+              properties:
+                client_ids:
+                  type: array
+                  items:
+                    type: integer
+                  description: List of Client IDs to receive these updates.
+                rules:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - instrument_id
+                    properties:
+                      instrument_id:
+                        type: integer
+                      trading_allowed_future:
+                        type: boolean
+                      max_lot_limit_future:
+                        type: number
+                        format: float
+                      min_lot_size_future:
+                        type: number
+                        format: float
+                      max_lots_per_order_future:
+                        type: number
+                        format: float
+                      trading_allowed_options:
+                        type: boolean
+                      max_lot_limit_options:
+                        type: number
+                        format: float
+                      min_lot_size_options:
+                        type: number
+                        format: float
+                      max_lots_per_order_options:
+                        type: number
+                        format: float
+            example:
+              client_ids: [13, 14, 16]
+              rules:
+                - instrument_id: 1
+                  trading_allowed_future: true
+                  max_lot_limit_future: 90
+                  min_lot_size_future: 1
+                  max_lots_per_order_future: 10
+                  trading_allowed_options: true
+                  max_lot_limit_options: 100
+                  min_lot_size_options: 1
+                  max_lots_per_order_options: 20
+                - instrument_id: 2
+                  trading_allowed_future: true
+                  max_lot_limit_future: 10
+                - instrument_id: 6
+                  trading_allowed_future: true
+                  max_lot_limit_future: 50
+                  max_lots_per_order_options: 20
+      responses:
+        '200':
+          description: Rules updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: "success"
+                message: "Successfully updated heterogeneous rules for 3 client(s)."
+                data: null
   /api/v1/config/dealer/downloadInstruments:
     get:
       summary: get instrument link
