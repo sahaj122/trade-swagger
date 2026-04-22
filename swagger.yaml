@@ -2144,6 +2144,101 @@ paths:
                   url: "https://pub-d913587b970544a7b4bfd914ab850604.r2.dev/public/instruments.zi\
                     p"
                   force_update: false
+  /api/v1/dealer/squareOffPosition/{client_id}:
+    post:
+      summary: Square off client position
+      description: Allows a dealer to manually close a client's open position for a specific instrument.
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the client whose position is being squared off.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - instrument_key
+                - lots_requested
+              properties:
+                instrument_key:
+                  type: string
+                  description: Unique key for the instrument (e.g., MCX_FO|472789).
+                lots_requested:
+                  type: integer
+                  description: Number of lots to square off.
+            example:
+              instrument_key: "MCX_FO|472789"
+              lots_requested: 1
+      responses:
+        '200':
+          description: Client position squared off successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  order:
+                    type: object
+                    properties:
+                      order_id:
+                        type: integer
+                      client_id:
+                        type: string
+                      instrument_key:
+                        type: string
+                      side:
+                        type: string
+                      total_lots:
+                        type: integer
+                      traded_price:
+                        type: number
+                      status:
+                        type: string
+                      message:
+                        type: string
+              example:
+                status: "success"
+                message: "Client position successfully squared off by dealer."
+                order:
+                  order_id: 68
+                  client_id: "13"
+                  instrument_key: "MCX_FO|472789"
+                  side: "SELL"
+                  total_lots: 1
+                  traded_price: 100
+                  status: "EXECUTED"
+                  message: "Position closed by admin/dealer"
+        '400':
+          description: Failed to square off (e.g., no open position)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: "fail"
+                message: "Client has no open position for this instrument to square off."
+                data: null
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
