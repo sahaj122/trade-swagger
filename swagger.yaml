@@ -2689,6 +2689,61 @@ paths:
                       p_created_at: "2026-04-22T17:13:32.403Z"
                       p_updated_at: "2026-04-22T17:13:35.955Z"
                       deleted_at: "2026-04-23T12:16:50.227Z"
+  /api/v1/dealer/deleteClientOrder/{order_id}:
+    delete:
+      summary: Delete client order
+      description: "Soft-deletes a client order from the database and purges the associated order data from the Redis cache."
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the order to be deleted.
+      responses:
+        '200':
+          description: Order deleted and purged from cache successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      order_id:
+                        type: string
+              example:
+                status: success
+                message: "Order deleted and purged from cache successfully."
+                data:
+                  order_id: "71"
+        '404':
+          description: Order not found or already deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: fail
+                message: "Order not found."
+                data: null
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
