@@ -2501,6 +2501,102 @@ paths:
                 status: fail
                 message: "Market data not available for MCX_FO|45735"
                 data: null
+  /api/v1/dealer/deletedOrders/{client_id}:
+    get:
+      summary: Fetch deleted client order history
+      description: "Retrieves a list of all soft-deleted orders for a specific client. Useful for auditing and restoring trade history."
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the client whose deleted orders are being fetched.
+      responses:
+        '200':
+          description: Deleted client order history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      orderResult:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            order_id:
+                              type: integer
+                            client_id:
+                              type: integer
+                            order_instrument_key:
+                              type: string
+                            order_trading_symbol:
+                              type: string
+                            order_underlying_symbol:
+                              type: string
+                            order_type:
+                              type: string
+                            order_side:
+                              type: string
+                            order_total_quantity:
+                              type: integer
+                            order_total_lots:
+                              type: integer
+                            order_traded_price:
+                              type: string
+                            order_limit_price:
+                              type: number
+                              nullable: true
+                            order_stop_loss_price:
+                              type: number
+                              nullable: true
+                            order_status:
+                              type: string
+                            orderMessage:
+                              type: string
+                            order_created_at:
+                              type: string
+                              format: date-time
+                            order_updated_at:
+                              type: string
+                              format: date-time
+                            deleted_at:
+                              type: string
+                              format: date-time
+              example:
+                status: success
+                message: "Deleted client order history retrieved successfully"
+                data:
+                  orderResult:
+                    - order_id: 71
+                      client_id: 13
+                      order_instrument_key: "MCX_FO|457535"
+                      order_trading_symbol: "SILVER 101250 PE 24 APR 26"
+                      order_underlying_symbol: "SILVER"
+                      order_type: "MARKET"
+                      order_side: "BUY"
+                      order_total_quantity: 30
+                      order_total_lots: 1
+                      order_traded_price: "95000.50"
+                      order_limit_price: null
+                      order_stop_loss_price: null
+                      order_status: "EXECUTED"
+                      orderMessage: "Trade forcefully created by admin/dealer"
+                      order_created_at: "2026-04-23T12:02:36.210Z"
+                      order_updated_at: "2026-04-23T12:02:36.210Z"
+                      order_deleted_at: "2026-04-23T12:02:36.313Z"
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
