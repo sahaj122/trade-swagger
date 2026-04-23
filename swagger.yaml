@@ -2343,6 +2343,54 @@ paths:
                 status: "fail"
                 message: "Position is not deleted. Cannot restore."
                 data: null
+  /api/v1/dealer/reopenClosedPosition/{p_id}:
+    post:
+      summary: Reopen a closed position
+      description: "Allows a dealer to manually reopen a previously closed or squared-off position, reversing the execution state."
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: p_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the position to be reopened.
+      responses:
+        '200':
+          description: Position reopened successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: "success"
+                message: "Position reopened successfully."
+                data: null
+        '400':
+          description: Failed to reopen (e.g., position is already active).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
