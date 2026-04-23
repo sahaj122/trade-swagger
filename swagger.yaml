@@ -2597,6 +2597,98 @@ paths:
                       order_created_at: "2026-04-23T12:02:36.210Z"
                       order_updated_at: "2026-04-23T12:02:36.210Z"
                       order_deleted_at: "2026-04-23T12:02:36.313Z"
+  /api/v1/dealer/deletedPositions/{client_id}:
+    get:
+      summary: Fetch deleted client positions
+      description: "Retrieves a history of soft-deleted positions for a specific client, including realized P&L and commission data."
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the client whose deleted positions are being retrieved.
+      responses:
+        '200':
+          description: Deleted client positions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      positionResult:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            p_id:
+                              type: integer
+                            client_id:
+                              type: integer
+                            p_instrument_key:
+                              type: string
+                            p_status:
+                              type: string
+                              enum: [open, closed]
+                            p_trading_symbol:
+                              type: string
+                            p_underlying_symbol:
+                              type: string
+                            p_total_quantity:
+                              type: integer
+                            p_total_lots:
+                              type: integer
+                            p_buy_price:
+                              type: string
+                            p_sell_price:
+                              type: string
+                            p_realized_pl:
+                              type: string
+                            p_commission:
+                              type: string
+                            p_net_realized_pl:
+                              type: string
+                            p_created_at:
+                              type: string
+                              format: date-time
+                            p_updated_at:
+                              type: string
+                              format: date-time
+                            deleted_at:
+                              type: string
+                              format: date-time
+              example:
+                status: success
+                message: "Deleted client positions retrieved successfully"
+                data:
+                  positionResult:
+                    - p_id: 40
+                      client_id: 13
+                      p_instrument_key: "MCX_FO|472789"
+                      p_status: "closed"
+                      p_trading_symbol: "SILVER 99500 CE 24 APR 26"
+                      p_underlying_symbol: "SILVER"
+                      p_total_quantity: 30
+                      p_total_lots: 1
+                      p_buy_price: "100.00"
+                      p_sell_price: "100.00"
+                      p_realized_pl: "0.00"
+                      p_commission: "-40.00"
+                      p_net_realized_pl: "-40.00"
+                      p_created_at: "2026-04-22T17:13:32.403Z"
+                      p_updated_at: "2026-04-22T17:13:35.955Z"
+                      deleted_at: "2026-04-23T12:16:50.227Z"
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
