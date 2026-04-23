@@ -2391,6 +2391,116 @@ paths:
                   data:
                     type: object
                     nullable: true
+  /api/v1/dealer/executeDealerTrade/{client_id}:
+    post:
+      summary: Execute a manual dealer trade for a client
+      description: "Creates a 'silent' executed trade for a specific client. This is used by dealers to manually enter trades at a custom price."
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the client for whom the trade is being executed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - instrument_key
+                - total_lots
+                - side
+                - custom_price
+              properties:
+                instrument_key:
+                  type: string
+                  description: "The unique key for the instrument (e.g., MCX_FO|457535)."
+                total_lots:
+                  type: integer
+                  minimum: 1
+                side:
+                  type: string
+                  enum: [BUY, SELL]
+                custom_price:
+                  type: number
+                  format: float
+                time:
+                  type: string
+                  format: date-time
+                  description: "Optional: Explicit time for the trade execution."
+            example:
+              instrument_key: "MCX_FO|457535"
+              total_lots: 1
+              side: "BUY"
+              custom_price: 95000.50
+      responses:
+        '200':
+          description: Silent trade created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  order:
+                    type: object
+                    properties:
+                      order_id:
+                        type: integer
+                      client_id:
+                        type: string
+                      instrument_key:
+                        type: string
+                      side:
+                        type: string
+                      total_lots:
+                        type: integer
+                      traded_price:
+                        type: number
+                      status:
+                        type: string
+                      trade_time:
+                        type: string
+                        format: date-time
+              example:
+                status: success
+                message: "Silent trade created successfully by dealer."
+                order:
+                  order_id: 71
+                  client_id: "13"
+                  instrument_key: "MCX_FO|457535"
+                  side: "BUY"
+                  total_lots: 1
+                  traded_price: 95000.5
+                  status: "EXECUTED"
+                  trade_time: "2026-04-23T12:02:36.210Z"
+        '400':
+          description: Trade execution failed (e.g., missing market data)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: fail
+                message: "Market data not available for MCX_FO|45735"
+                data: null
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
