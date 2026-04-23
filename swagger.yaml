@@ -2744,6 +2744,61 @@ paths:
                 status: fail
                 message: "Order not found."
                 data: null
+  /api/v1/dealer/restoreClientDeletedOrder/{order_id}:
+    patch:
+      summary: Restore a deleted client order
+      description: "Restores a soft-deleted order record by setting its deleted_at timestamp back to null."
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the deleted order to be restored.
+      responses:
+        '200':
+          description: Order restored successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      order_id:
+                        type: string
+              example:
+                status: success
+                message: "Order restored successfully."
+                data:
+                  order_id: "71"
+        '400':
+          description: Restore failed (e.g., order is already active)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: fail
+                message: "Order is already active."
+                data: null
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
