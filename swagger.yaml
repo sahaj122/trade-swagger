@@ -2239,6 +2239,58 @@ paths:
                 status: "fail"
                 message: "Client has no open position for this instrument to square off."
                 data: null
+  /api/v1/dealer/deleteClientPosition/{p_id}:
+    delete:
+      summary: Delete client position
+      description: "Permanently removes a specific position record by its ID and updates the associated financial ledgers."
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: p_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the position to be deleted.
+      responses:
+        '200':
+          description: Position deleted and ledgers updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: "success"
+                message: "Position deleted and ledgers updated."
+                data: null
+        '404':
+          description: Position not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: "fail"
+                message: "Position not found."
+                data: null
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
