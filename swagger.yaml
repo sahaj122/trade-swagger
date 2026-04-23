@@ -2291,6 +2291,58 @@ paths:
                 status: "fail"
                 message: "Position not found."
                 data: null
+  /api/v1/dealer/restoreClientDeletedPosition/{p_id}:
+    patch:
+      summary: Restore a deleted client position
+      description: "Restores a soft-deleted position record and reconciles the associated financial ledgers."
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: p_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the deleted position to restore.
+      responses:
+        '200':
+          description: Position restored and ledgers updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: "success"
+                message: "Position restored and ledgers updated."
+                data: null
+        '400':
+          description: Restore failed (e.g., position is not currently deleted).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
+              example:
+                status: "fail"
+                message: "Position is not deleted. Cannot restore."
+                data: null
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
