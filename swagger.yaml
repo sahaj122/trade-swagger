@@ -2875,6 +2875,96 @@ paths:
                   previous_balance: 0
                   new_balance: 100000
                   note: "money deposit by client"
+  /api/v1/dealer/withdraw/{client_id}:
+    post:
+      summary: Withdraw funds from client wallet
+      description: "Records a withdrawal transaction in the ledger and decreases the client's available balance."
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the client whose funds are being withdrawn.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+              properties:
+                amount:
+                  type: number
+                  format: float
+                  description: The amount to withdraw.
+                note:
+                  type: string
+                  nullable: true
+                  description: Optional comment regarding the withdrawal.
+            example:
+              amount: 100000
+              note: "money withdrawal"
+      responses:
+        '200':
+          description: Funds withdrawn successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      ledger_id:
+                        type: integer
+                      client_id:
+                        type: string
+                      transaction_type:
+                        type: string
+                        enum: [WITHDRAWAL]
+                      amount:
+                        type: number
+                      previous_balance:
+                        type: number
+                      new_balance:
+                        type: number
+                      note:
+                        type: string
+              example:
+                status: success
+                message: "Funds withdrawn from client wallet successfully"
+                data:
+                  ledger_id: 5
+                  client_id: "13"
+                  transaction_type: "WITHDRAWAL"
+                  amount: 100000
+                  previous_balance: 100000
+                  new_balance: 0
+                  note: "money withdrawal"
+        '400':
+          description: Withdrawal failed (e.g., insufficient balance)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
   /api/v1/client/placeMarketOrder:
     post:
       summary: market order
