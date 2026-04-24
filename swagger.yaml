@@ -104,6 +104,8 @@ paths:
                 status: success
                 message: Distributor profile fetched successfully
                 data:
+                  role_id: 1,
+                  role_key: "DISTRIBUTOR"
                   distributorProfile:
                     id: 1
                     dist_name: sahaj
@@ -1108,6 +1110,8 @@ paths:
                 status: success
                 message: Dealer profile fetched successfully
                 data:
+                  role_id: 2
+                  role_key: "DEALER"
                   dealerProfile:
                     dealer_id: 1
                     dealer_name: Raj
@@ -3137,6 +3141,8 @@ paths:
                 status: success
                 message: Client profile fetched successfully
                 data:
+                  role_id: 3
+                  role_key: "CLIENT"
                   clientProfile:
                     client_id: 13
                     client_name: vijay
