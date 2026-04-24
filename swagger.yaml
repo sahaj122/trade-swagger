@@ -41,6 +41,8 @@ paths:
                     EyMyIsInJvbGUiOiJkaXN0cmlidXRvciIsImlhdCI6MTc2OTQxODczNCwiZ\
                     XhwIjoxNzY5NTA1MTM0fQ.0xRYrLeHlKab48fTYjaecHyZuURR75mKYPiB4\
                     1m2S3M"
+                  role_id: 1
+                  role_key: "DISTRIBUTOR"
                   distributor:
                     id: 1
                     dist_name: "sahaj"
