@@ -3718,68 +3718,132 @@ paths:
                   force_update: false
   /api/v1/watchlist/addItem:
     post:
-      summary: add item
+      summary: Add multiple instruments to a watchlist
+      description: "Allows bulk addition of market instruments to a specific watchlist ID."
       tags:
         - watchlist
       security:
         - BearerAuth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               required:
-                - instrumentKey
-                - exchangeToken
-                - expiryDate
+                - watchlistId
+                - instruments
               properties:
-                instrumentKey:
-                  type: string
-                  description: The unique key for the instrument (e.g., MCX_FO|44965)
-                exchangeToken:
-                  type: string
-                  description: The token provided by the exchange
-                expiryDate:
+                watchlistId:
                   type: integer
-                  format: int64
-                  description: Epoch timestamp for the instrument's expiry
+                instruments:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - instrumentKey
+                      - exchangeToken
+                      - expiryDate
+                    properties:
+                      instrumentKey:
+                        type: string
+                        description: "Unique instrument identifier (e.g., MCX_FO|44969)."
+                      exchangeToken:
+                        type: string
+                        description: "Numeric token string from the exchange."
+                      expiryDate:
+                        type: integer
+                        format: int64
+                        description: "Expiry timestamp in milliseconds (UTC)."
             example:
-              instrumentKey: "MCX_FO|44965"
-              exchangeToken: "447553"
-              expiryDate: 1753986599000
+              watchlistId: 642
+              instruments:
+                - instrumentKey: "MCX_FO|44969"
+                  exchangeToken: "447553"
+                  expiryDate: 1753986599000
+                - instrumentKey: "NSE_EQ|112345"
+                  exchangeToken: "12345"
+                  expiryDate: 1753986599000
       responses:
-        "201":
-          description: Instrument added to watchlist successfully
+        '200':
+          description: Instruments added successfully
           content:
             application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      watchlistId:
+                        type: integer
+                      itemsAdded:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            watchlist_id:
+                              type: integer
+                            instrument_key:
+                              type: string
+                            exchange_token:
+                              type: integer
+                            expiry_date:
+                              type: string
+                              format: date-time
+                            order_index:
+                              type: integer
+                            createdAt:
+                              type: string
+                              format: date-time
+                            updatedAt:
+                              type: string
+                              format: date-time
               example:
-                status: "success"
-                message: "Instrument added to watchlist successfully."
+                status: success
+                message: "2 instruments added to watchlist successfully."
                 data:
-                  watchlistItem:
-                    id: 17
-                    watchlist_id: 1
-                    instrument_key: "MCX_FO|44965"
-                    exchange_token: 447553
-                    expiry_date: "2025-07-31T18:29:59.000Z"
-                    order_index: 3
-                    createdAt: "2026-01-28T12:56:38.067Z"
-                    updatedAt: "2026-01-28T12:56:38.067Z"
-        "400":
-          description: Missing required parameters
+                  watchlistId: 642
+                  itemsAdded:
+                    - id: 3
+                      watchlist_id: 642
+                      instrument_key: "MCX_FO|44969"
+                      exchange_token: 447553
+                      expiry_date: "2025-07-31T18:29:59.000Z"
+                      order_index: 2
+                      createdAt: "2026-04-24T13:15:21.003Z"
+                      updatedAt: "2026-04-24T13:15:21.003Z"
+                    - id: 4
+                      watchlist_id: 642
+                      instrument_key: "NSE_EQ|112345"
+                      exchange_token: 12345
+                      expiry_date: "2025-07-31T18:29:59.000Z"
+                      order_index: 3
+                      createdAt: "2026-04-24T13:15:21.003Z"
+                      updatedAt: "2026-04-24T13:15:21.003Z"
+        '400':
+          description: Failed to add instruments (e.g., duplicates)
           content:
             application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    nullable: true
               example:
-                status: "fail"
-                message: "Instrument Key is required."
-                data: null
-        "409":
-          description: Conflict - Instrument already in watchlist
-          content:
-            application/json:
-              example:
-                status: "fail"
-                message: "Instrument already exists in this watchlist."
+                status: fail
+                message: "All provided instruments already exist in this watchlist."
                 data: null
   /api/v1/watchlist/items/{watchlistItemId}:
     delete:
