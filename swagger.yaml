@@ -5,6 +5,7 @@ info:
   description: ""
 servers:
   - url: http://localhost:3000
+  - url: http://134.195.138.17:3000
 paths:
   /api/v1/authen/login:
     post:
