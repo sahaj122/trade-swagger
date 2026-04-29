@@ -4099,6 +4099,105 @@ paths:
                 status: "success"
                 message: "Watchlist instruments reordered."
                 data: null
+  /api/v1/client/searchInstruments:
+    get:
+      summary: Search for market instruments
+      description: "Searches for trading instruments based on a query string and filters them by specific exchanges."
+      tags:
+        - client
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: "The search query (e.g., 'go')."
+        - name: exchanges
+          in: query
+          required: false
+          schema:
+            type: string
+          description: "Comma-separated list of exchanges to filter by (e.g., MCX_FUTURE,NSE_FUTURE)."
+      responses:
+        '200':
+          description: Search results retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      instruments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: "Unique market identifier (e.g., market:MCX_FO|487819)."
+                            ltp:
+                              type: string
+                            lot_size:
+                              type: string
+                            qty_multiplier:
+                              type: string
+                            segment:
+                              type: string
+                            trading_symbol:
+                              type: string
+                            underlying_symbol:
+                              type: string
+                            weekly:
+                              type: string
+                            exchangeType:
+                              type: string
+                            instrumentType:
+                              type: string
+                            expiry_date:
+                              type: string
+                            currentTs:
+                              type: string
+                            asset_type:
+                              type: string
+                            prevClose:
+                              type: string
+              examples:
+                instruments_found:
+                  summary: Successful search with results
+                  value:
+                    status: "success"
+                    message: "Instruments fetched successfully"
+                    data:
+                      instruments:
+                        - id: "market:MCX_FO|487819"
+                          ltp: "0"
+                          lot_size: "100"
+                          qty_multiplier: "10"
+                          segment: "MCX_FO"
+                          trading_symbol: "GOLDM FUT 05 MAY 26"
+                          underlying_symbol: "GOLDM"
+                          weekly: "false"
+                          exchangeType: "MCX_FO"
+                          instrumentType: "FUT"
+                          expiry_date: "1778005799000"
+                          currentTs: "0"
+                          asset_type: "COM"
+                          prevClose: "0"
+                query_too_short:
+                  summary: Search query less than 3 characters
+                  value:
+                    status: "success"
+                    message: "Enter at least 3 characters to search"
+                    data:
+                      instruments: []
 components:
   securitySchemes:
     BearerAuth:
