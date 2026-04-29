@@ -4116,7 +4116,7 @@ paths:
           description: "The search query (e.g., 'go')."
         - name: exchanges
           in: query
-          required: false
+          required: true
           schema:
             type: string
           description: "Comma-separated list of exchanges to filter by (e.g., MCX_FUTURE,NSE_FUTURE)."
