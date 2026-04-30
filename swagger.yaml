@@ -60,6 +60,98 @@ paths:
                 status: "fail"
                 message: "Invalid credentials"
                 data: null
+  /api/v1/distributor/getSubscriptionPlan:
+      get:
+        summary: Get all subscription plans
+        description: Retrieve a list of all available subscription plans including their amounts and allowed exchanges.
+        tags:
+          - distributor
+        responses:
+          "200":
+            description: Subscription plans fetched successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: string
+                      example: "success"
+                    message:
+                      type: string
+                      example: "Subscription plans fetched successfully"
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          plan_name:
+                            type: string
+                          plan_amount:
+                            type: string
+                          status:
+                            type: string
+                          exchanges_allowed:
+                            type: array
+                            items:
+                              type: string
+                          deleted_at:
+                            type: string
+                            nullable: true
+                          createdAt:
+                            type: string
+                            format: date-time
+                          updatedAt:
+                            type: string
+                            format: date-time
+                example:
+                  status: "success"
+                  message: "Subscription plans fetched successfully"
+                  data:
+                    - id: 1
+                      plan_name: "basic"
+                      plan_amount: "10000.00"
+                      status: "active"
+                      exchanges_allowed:
+                        - "MCX_FUTURE"
+                        - "NSE_FUTURE"
+                      deleted_at: null
+                      createdAt: "2026-04-14T09:58:19.838Z"
+                      updatedAt: "2026-04-14T09:58:19.838Z"
+                    - id: 6
+                      plan_name: "Future Options Pro"
+                      plan_amount: "10000.00"
+                      status: "active"
+                      exchanges_allowed:
+                        - "MCX_FUTURE"
+                        - "NSE_FUTURE"
+                        - "NSE_OPTION"
+                        - "MCX_OPTION"
+                      deleted_at: null
+                      createdAt: "2026-04-21T16:34:10.919Z"
+                      updatedAt: "2026-04-21T16:34:10.919Z"
+                    - id: 8
+                      plan_name: "NSE ALL"
+                      plan_amount: "10000.00"
+                      status: "active"
+                      exchanges_allowed:
+                        - "MCX_FUTURE"
+                        - "NSE_FUTURE"
+                        - "NSE_OPTION"
+                        - "MCX_OPTION"
+                        - "NCD_FUTURE"
+                      deleted_at: null
+                      createdAt: "2026-04-21T16:35:48.102Z"
+                      updatedAt: "2026-04-21T16:35:48.102Z"
+          "401":
+            description: Unauthorized access
+            content:
+              application/json:
+                example:
+                  status: "fail"
+                  message: "Unauthorized access: Distributor ID missing."
   /api/v1/distributor/getDistributorProfile:
     get:
       summary: Fetch distributor profile
