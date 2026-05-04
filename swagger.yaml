@@ -312,6 +312,8 @@ paths:
                   format: date
                 plan_price:
                   type: integer
+                plan_id:
+                  type: integer
                 max_clients_allowed:
                   type: integer
                 subscribed_plans:
@@ -343,6 +345,7 @@ paths:
               plan_start_date: "2026-01-19"
               plan_end_date: "2027-01-19"
               plan_price: 10000
+              plan_id: 1
               max_clients_allowed: 100
               subscribed_plans:
                 - MCX_OPTION
@@ -366,6 +369,7 @@ paths:
                   plan_start_date: "2026-01-19T00:00:00.000Z"
                   plan_end_date: "2027-01-19T00:00:00.000Z"
                   plan_price: 10000
+                  plan_id: 1
                   max_clients_allowed: 100
                   subscribed_plans:
                     - MCX_OPTION
