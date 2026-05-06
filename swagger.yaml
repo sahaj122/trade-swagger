@@ -239,6 +239,15 @@ paths:
                     subscribed_plans: []
                     createdAt: "2025-08-11T10:46:52.224Z"
                     updatedAt: "2026-01-20T10:35:59.297Z"
+                    role_id: 2
+                    plan:
+                      id: 1
+                      plan_name: "basic"
+                      plan_amount: "10000"
+                      status: "active"
+                      exchanges_allowed:
+                        - "MCX_FUTURE"
+                        - "NSE_FUTURE"
                   - dealer_id: 2
                     dealer_name: "vikram"
                     dealer_username: "vikram123"
@@ -252,6 +261,15 @@ paths:
                     subscribed_plans: []
                     createdAt: "2025-10-07T13:56:20.491Z"
                     updatedAt: "2025-10-07T13:56:20.491Z"
+                    role_id: 2
+                    plan:
+                      id: 1
+                      plan_name: "basic"
+                      plan_amount: "10000"
+                      status: "active"
+                      exchanges_allowed:
+                        - "MCX_FUTURE"
+                        - "NSE_FUTURE"
                   - dealer_id: 4
                     dealer_name: "abhi"
                     dealer_username: "abhi123456"
@@ -265,6 +283,15 @@ paths:
                     subscribed_plans: []
                     createdAt: "2025-10-10T12:03:33.025Z"
                     updatedAt: "2026-01-25T12:30:33.504Z"
+                    role_id: 2
+                    plan:
+                      id: 1
+                      plan_name: "basic"
+                      plan_amount: "10000"
+                      status: "active"
+                      exchanges_allowed:
+                        - "MCX_FUTURE"
+                        - "NSE_FUTURE"
         "401":
           description: Unauthorized - Invalid or expired token
           content:
