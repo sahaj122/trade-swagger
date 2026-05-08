@@ -3427,6 +3427,71 @@ paths:
                 status: "fail"
                 message: "Order not found"
                 data: null
+  /api/v1/client/modifyOrder/{orderId}:
+    put:
+      summary: Modify an existing order
+      tags:
+        - client
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 82
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [instrument_key, total_lots, price]
+              properties:
+                instrument_key:
+                  type: string
+                  example: "NSE_FO|66180"
+                total_lots:
+                  type: integer
+                  example: 2
+                price:
+                  type: number
+                  example: 100
+      responses:
+        "200":
+          description: Order modified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Stop loss order modified"
+                  data:
+                    type: object
+                    properties:
+                      order:
+                        type: object
+                        properties:
+                          order_id: { type: integer }
+                          client_id: { type: integer }
+                          order_instrument_key: { type: string }
+                          order_trading_symbol: { type: string }
+                          order_underlying_symbol: { type: string }
+                          order_type: { type: string }
+                          order_side: { type: string }
+                          order_total_quantity: { type: integer }
+                          order_total_lots: { type: integer }
+                          order_stop_loss_price: { type: number }
+                          order_status: { type: string }
+                          orderMessage: { type: string }
+                          order_created_at: { type: string, format: date-time }
+                          order_updated_at: { type: string, format: date-time }
   /api/v1/client/getAllOrders:
     get:
       summary: get all orders
