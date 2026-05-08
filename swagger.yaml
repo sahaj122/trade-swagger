@@ -3216,74 +3216,22 @@ paths:
                     date_range:
                       start: "2026-04-13T18:30:00.000Z"
                       end: "2026-04-24T18:29:59.999Z"
-  /api/v1/client/placeMarketOrder:
+  /api/v1/client/placeOrder:
     post:
-      summary: market order
+      summary: Place an Order
       tags:
         - client
       security:
         - BearerAuth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - instrument_key
-                - total_lots
-                - side
-              properties:
-                instrument_key:
-                  type: string
-                total_lots:
-                  type: number
-                side:
-                  type: string
-                  enum: [ buy, sell ]
-            example:
-              instrument_key: "MCX_FO|449534"
-              total_lots: 1.0
-              side: "sell"
+              $ref: '#/components/schemas/PlaceOrderRequest'
       responses:
-        "201":
-          description: Market order executed successfully
-          content:
-            application/json:
-              example:
-                status: "success"
-                message: "Market order executed successfully."
-                order:
-                  order_id: 721
-                  client_id: 13
-                  instrument_key: "MCX_FO|449534"
-                  side: "SELL"
-                  total_lots: 1
-                  total_quantity: 1
-                  traded_price: 151198
-                  status: "EXECUTED"
-        "400":
-          description: Order Validation Failed (Risk, Balance, or Limit issues)
-          content:
-            application/json:
-              examples:
-                lotLimitExceeded:
-                  summary: Max lots per order exceeded
-                  value:
-                    status: "fail"
-                    message: "Order lots (10) exceed maximum per future order (1)."
-                    data: null
-                insufficientBalance:
-                  summary: Insufficient account balance
-                  value:
-                    status: "fail"
-                    message: "Insufficient balance (-3757.5 <= -1000)."
-                    data: null
-                nakedOptionSelling:
-                  summary: Option selling not permitted
-                  value:
-                    status: "fail"
-                    message: "Naked option selling is not allowed for this account."
-                    data: null
+        "200":
+          description: Order placed successfully
   /api/v1/client/getClientProfile:
     get:
       summary: Fetch client profile
@@ -3424,122 +3372,6 @@ paths:
                           - MCX_FUTURE
                           - NSE_FUTURE
                         status: active
-  /api/v1/client/placeLimitOrder:
-    post:
-      summary: place limit order
-      tags:
-        - client
-      security:
-        - BearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - instrument_key
-                - total_lots
-                - side
-                - limit_price
-              properties:
-                instrument_key:
-                  type: string
-                total_lots:
-                  type: number
-                side:
-                  type: string
-                  enum: [ buy, sell ]
-                limit_price:
-                  type: number
-            example:
-              instrument_key: "MCX_FO|449534"
-              total_lots: 2
-              side: "sell"
-              limit_price: 155000
-      responses:
-        "201":
-          description: Limit order placed successfully
-          content:
-            application/json:
-              example:
-                status: "success"
-                message: "Limit order placed"
-                data:
-                  order:
-                    order_id: 730
-                    client_id: 13
-                    order_instrument_key: "MCX_FO|449534"
-                    order_trading_symbol: "GOLD FUT 05 FEB 26"
-                    order_underlying_symbol: "GOLD"
-                    order_type: "limit"
-                    order_side: "SELL"
-                    order_total_quantity: 2
-                    order_total_lots: 2
-                    order_limit_price: "155000.00"
-                    order_stop_loss_price: "160000.00"
-                    order_status: "OPEN"
-                    orderMessage: "Limit order placed, pending execution."
-                    order_traded_price: null
-                    order_created_at: "2026-01-28T07:23:03.189Z"
-                    order_updated_at: "2026-01-28T07:23:03.189Z"
-        "400":
-          description: Missing required parameters
-          content:
-            application/json:
-              example:
-                status: "fail"
-                message: "Missing required parameters: instrument_key, total_lots, side,
-                  limit_price"
-                data: null
-  /api/v1/client/modifyLimitOrder/{orderId}:
-    put:
-      summary: modify limit order
-      tags:
-        - client
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: orderId
-          in: path
-          required: true
-          schema:
-            type: string
-          example: "643"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - total_lots
-                - limit_price
-              properties:
-                total_lots:
-                  type: number
-                  description: New total lots for the order
-                limit_price:
-                  type: number
-                  description: New limit price for the order
-            example:
-              total_lots: 5
-              limit_price: 123000.00
-      responses:
-        "200":
-          description: Limit order modified successfully
-          content:
-            application/json:
-              example:
-                status: "success"
-                message: "Limit order modified"
-                data: null
-        "404":
-          description: Order not found
-          content:
-            application/json:
-              example:
-                status: "fail"
-                message: "Order not found"
-                data: null
   /api/v1/client/cancelOrder/{orderId}:
     delete:
       summary: cancel order
@@ -3595,152 +3427,6 @@ paths:
                 status: "fail"
                 message: "Order not found"
                 data: null
-  /api/v1/client/addStopLossOrder:
-    post:
-      summary: add stop loss order
-      tags:
-        - client
-      security:
-        - BearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - instrument_key
-                - total_lots
-                - stop_loss_price
-              properties:
-                instrument_key:
-                  type: string
-                total_lots:
-                  type: number
-                stop_loss_price:
-                  type: number
-            example:
-              instrument_key: "MCX_FO|472916"
-              total_lots: 1
-              stop_loss_price: 290
-      responses:
-        "201":
-          description: Stop loss order placed successfully
-          content:
-            application/json:
-              example:
-                status: "success"
-                message: "Stop loss order placed"
-                data:
-                  order:
-                    order_id: 731
-                    client_id: 13
-                    order_instrument_key: "MCX_FO|472916"
-                    order_trading_symbol: "SILVER 141000 PE 27 JAN 26"
-                    order_underlying_symbol: "SILVER"
-                    order_type: "stop_loss_order"
-                    order_side: "SELL"
-                    order_total_quantity: 1
-                    order_total_lots: 1
-                    order_stop_loss_price: "290.00"
-                    order_status: "OPEN"
-                    orderMessage: "Stop-loss order placed, pending execution."
-                    order_traded_price: null
-                    order_limit_price: null
-                    order_created_at: "2026-01-28T11:55:36.749Z"
-                    order_updated_at: "2026-01-28T11:55:36.749Z"
-        "400":
-          description: Missing required parameters
-          content:
-            application/json:
-              example:
-                status: "fail"
-                message: "Missing required parameters: instrument_key, total_lots,
-                  stop_loss_price"
-                data: null
-  /api/v1/client/modifyStopLossOrder/{orderId}:
-    put:
-      summary: modify stop loss
-      tags:
-        - client
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: orderId
-          in: path
-          required: true
-          schema:
-            type: string
-          example: "733"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - instrument_key
-                - total_lots
-                - stop_loss_price
-              properties:
-                instrument_key:
-                  type: string
-                total_lots:
-                  type: number
-                stop_loss_price:
-                  type: number
-            example:
-              instrument_key: "MCX_FO|472916"
-              total_lots: 1
-              stop_loss_price: 250
-      responses:
-        "200":
-          description: Stop loss order modified successfully
-          content:
-            application/json:
-              example:
-                status: "success"
-                message: "Stop loss order modified"
-                data:
-                  order:
-                    order_id: 733
-                    client_id: 13
-                    order_instrument_key: "MCX_FO|472916"
-                    order_trading_symbol: "SILVER 141000 PE 27 JAN 26"
-                    order_type: "stop_loss_order"
-                    order_side: "SELL"
-                    order_total_lots: 1
-                    order_stop_loss_price: 250
-                    order_status: "OPEN"
-                    order_updated_at: "2026-01-28T12:09:48.640Z"
-        "400":
-          description: Validation Error (Price or Lot limits)
-          content:
-            application/json:
-              examples:
-                priceValidation:
-                  summary: Price logic error
-                  value:
-                    status: "fail"
-                    message: "Stop-loss must be below average buy price"
-                lotLimit:
-                  summary: Excessive lots
-                  value:
-                    status: "fail"
-                    message: "Cannot square-off more lots than available in net position."
-        "404":
-          description: Resource not found
-          content:
-            application/json:
-              examples:
-                positionMissing:
-                  summary: No open position
-                  value:
-                    status: "fail"
-                    message: "No existing position found for this instrument."
-                orderMissing:
-                  summary: Order not found
-                  value:
-                    status: "fail"
-                    message: "Order not found"
   /api/v1/client/getAllOrders:
     get:
       summary: get all orders
@@ -4632,3 +4318,36 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
+  schemas:
+    PlaceOrderRequest:
+      type: object
+      required:
+        - order_type
+        - instrument_key
+        - total_lots
+        - side
+      properties:
+        order_type:
+          type: string
+          enum:
+            - market
+            - limit
+            - stop_loss_order
+          description: "The type of order you want to place."
+        instrument_key:
+          type: string
+          example: "NSE_FO|66180"
+        total_lots:
+          type: number
+          example: 1.0
+        side:
+          type: string
+          enum: [buy, sell]
+        limit_price:
+          type: number
+          description: "**REQUIRED** if order_type is `limit`. Ignored otherwise."
+          example: 700
+        stop_loss_price:
+          type: number
+          description: "**REQUIRED** if order_type is `stop_loss_order`. Ignored otherwise."
+          example: 600
