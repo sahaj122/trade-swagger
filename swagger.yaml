@@ -1292,28 +1292,38 @@ paths:
                   format: password
                 client_contact:
                   type: string
-                client_balance:
-                  type: integer
                 status:
                   type: boolean
                   default: true
                 auto_square_off_balance:
-                  type: integer
+                  type: number
                 total_max_lots_allowed_future:
-                  type: integer
+                  type: number
                 total_max_lots_allowed_options:
-                  type: integer
+                  type: number
                 commission_per_lot:
-                  type: integer
+                  type: number
+                commission_per_lot_ncd:
+                  type: number
                 commission_per_crore_nse:
-                  type: integer
+                  type: number
                 commission_per_crore_mcx:
-                  type: integer
+                  type: number
                 jobbing_allowed:
                   type: boolean
                 jobbing_time_position:
                   type: integer
                 allow_limit_orders:
+                  type: boolean
+                allow_position_carry_nse:
+                  type: boolean
+                allow_position_carry_mcx:
+                  type: boolean
+                allow_position_carry_nse_option:
+                  type: boolean
+                allow_position_carry_mcx_option:
+                  type: boolean
+                allow_position_carry_ncd:
                   type: boolean
                 opition_selling_allowed:
                   type: boolean
@@ -1323,17 +1333,22 @@ paths:
               client_password: "123123"
               confirmPassword: "123123"
               client_contact: "9876543210"
-              client_balance: 50000
               status: true
               auto_square_off_balance: -2000
               total_max_lots_allowed_future: 20
               total_max_lots_allowed_options: 50
               commission_per_lot: 25
+              commission_per_lot_ncd: 50
               commission_per_crore_nse: 1500
               commission_per_crore_mcx: 2000
               jobbing_allowed: true
               jobbing_time_position: 15
               allow_limit_orders: true
+              allow_position_carry_nse: true
+              allow_position_carry_mcx: true
+              allow_position_carry_nse_option: true
+              allow_position_carry_mcx_option: true
+              allow_position_carry_ncd: true
               opition_selling_allowed: false
       responses:
         "200":
@@ -1357,29 +1372,31 @@ paths:
                         type: string
                         format: date-time
                       client_balance:
-                        type: integer
+                        type: number
                       client_status:
                         type: boolean
                       total_max_lots_allowed_future:
-                        type: integer
+                        type: number
                       total_standing_lots_future:
-                        type: integer
+                        type: number
                       total_max_lots_allowed_options:
-                        type: integer
+                        type: number
                       total_standing_lots_options:
-                        type: integer
+                        type: number
                       auto_square_off_balance:
-                        type: integer
+                        type: number
                       jobbing_allowed:
                         type: boolean
                       jobbing_time_position:
                         type: integer
                       commission_per_crore_mcx:
-                        type: integer
+                        type: number
                       commission_per_crore_nse:
-                        type: integer
+                        type: number
                       commission_per_lot:
-                        type: integer
+                        type: number
+                      commission_per_lot_ncd:
+                        type: number
                       allow_stop_loss_above_high_low:
                         type: boolean
                       allow_limit_orders:
@@ -1388,9 +1405,13 @@ paths:
                         type: boolean
                       allow_position_carry_nse:
                         type: boolean
-                      allow_position_carry_option:
-                        type: boolean
                       allow_position_carry_mcx:
+                        type: boolean
+                      allow_position_carry_nse_option:
+                        type: boolean
+                      allow_position_carry_mcx_option:
+                        type: boolean
+                      allow_position_carry_ncd:
                         type: boolean
                       opition_selling_allowed:
                         type: boolean
@@ -1409,8 +1430,8 @@ paths:
                 status: success
                 message: Client created successfully!
                 data:
-                  c_created_at: "2026-04-21T13:49:06.562Z"
-                  c_updated_at: "2026-04-21T13:49:06.562Z"
+                  c_created_at: "2026-05-20T13:49:06.562Z"
+                  c_updated_at: "2026-05-20T13:49:06.562Z"
                   client_balance: 0
                   client_status: true
                   total_max_lots_allowed_future: 10
@@ -1423,12 +1444,15 @@ paths:
                   commission_per_crore_mcx: 0
                   commission_per_crore_nse: 0
                   commission_per_lot: 20
+                  commission_per_lot_ncd: 50
                   allow_stop_loss_above_high_low: true
                   allow_limit_orders: false
                   allow_limit_orders_above_high_low: true
                   allow_position_carry_nse: true
-                  allow_position_carry_option: true
                   allow_position_carry_mcx: true
+                  allow_position_carry_nse_option: true
+                  allow_position_carry_mcx_option: true
+                  allow_position_carry_ncd: true
                   opition_selling_allowed: false
                   client_id: 16
                   client_name: "abhbi"
