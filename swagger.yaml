@@ -3502,6 +3502,60 @@ paths:
                 status: "fail"
                 message: "Invalid token. Please login again."
                 data: null
+  /api/v1/dealer/toggleClientPin/{client_id}:
+    post:
+      summary: Toggle client pinned status
+      description: Allows a dealer to pin or unpin a client on their dashboard for quick access. Toggles the current state.
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the client whose pinned status is being toggled.
+      responses:
+        "200":
+          description: Client pinned status toggled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      is_pinned:
+                        type: boolean
+                        description: The updated pinned state of the client.
+              example:
+                status: "success"
+                message: "Client pinned successfully"
+                data:
+                  is_pinned: true
+        "401":
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Invalid token. Please login again."
+                data: null
+        "404":
+          description: Client not found
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "No client found with the provided ID."
+                data: null
   /api/v1/client/placeOrder:
     post:
       summary: Place an Order
