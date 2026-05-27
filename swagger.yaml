@@ -3705,6 +3705,193 @@ paths:
                 status: "fail"
                 message: "Invalid token. Please login again."
                 data: null
+  /api/v1/dealer/getTradeHistory/{client_id}:
+    get:
+      summary: Fetch trade history of a specific client
+      description: Allows a dealer to retrieve a paginated log of closed trading positions for a specific client, complete with execution prices, realized metrics, and date-range calculations.
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique ID of the client whose trade history is being requested.
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: The page number for pagination blocks.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+          description: Maximum number of history entries to return per page.
+      responses:
+        "200":
+          description: Client trade history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      tradeHistory:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tradebook_id:
+                              type: integer
+                            p_id:
+                              type: integer
+                            client_id:
+                              type: integer
+                            p_instrument_key:
+                              type: string
+                            p_status:
+                              type: string
+                            p_trading_symbol:
+                              type: string
+                            p_underlying_symbol:
+                              type: string
+                            p_total_quantity:
+                              type: string
+                            p_total_lots:
+                              type: string
+                            p_buy_price:
+                              type: string
+                            p_sell_price:
+                              type: string
+                            p_realized_pl:
+                              type: string
+                            p_commission:
+                              type: string
+                            p_net_realized_pl:
+                              type: string
+                            p_created_at:
+                              type: string
+                              format: date-time
+                            p_updated_at:
+                              type: string
+                              format: date-time
+                            deleted_at:
+                              type: string
+                              format: date-time
+                              nullable: true
+                      pagination:
+                        type: object
+                        properties:
+                          current_page:
+                            type: integer
+                          limit_per_page:
+                            type: integer
+                          has_next_page:
+                            type: boolean
+                          has_previous_page:
+                            type: boolean
+                          date_range:
+                            type: object
+                            properties:
+                              start:
+                                type: string
+                                format: date-time
+                              end:
+                                type: string
+                                format: date-time
+              example:
+                status: "success"
+                message: "Trade history retrieved successfully"
+                data:
+                  tradeHistory:
+                    - tradebook_id: 875
+                      p_id: 105
+                      client_id: 13
+                      p_instrument_key: "MCX_FO|459277"
+                      p_status: "closed"
+                      p_trading_symbol: "GOLD FUT 05 JUN 26"
+                      p_underlying_symbol: "GOLD"
+                      p_total_quantity: "-1"
+                      p_total_lots: "-1"
+                      p_buy_price: "158894.00"
+                      p_sell_price: "158870.00"
+                      p_realized_pl: "-2400.00"
+                      p_commission: "0.00"
+                      p_net_realized_pl: "-2400.00"
+                      p_created_at: "2026-05-27T11:35:23.084Z"
+                      p_updated_at: "2026-05-27T11:35:27.429Z"
+                      deleted_at: null
+                    - tradebook_id: 874
+                      p_id: 103
+                      client_id: 13
+                      p_instrument_key: "MCX_FO|464150"
+                      p_status: "closed"
+                      p_trading_symbol: "SILVER FUT 03 JUL 26"
+                      p_underlying_symbol: "SILVER"
+                      p_total_quantity: "30"
+                      p_total_lots: "1"
+                      p_buy_price: "271244.00"
+                      p_sell_price: "271151.00"
+                      p_realized_pl: "-2790.00"
+                      p_commission: "0.00"
+                      p_net_realized_pl: "-2790.00"
+                      p_created_at: "2026-05-27T11:35:00.530Z"
+                      p_updated_at: "2026-05-27T11:35:05.088Z"
+                      deleted_at: null
+                    - tradebook_id: 876
+                      p_id: 97
+                      client_id: 13
+                      p_instrument_key: "MCX_FO|459277"
+                      p_status: "closed"
+                      p_trading_symbol: "GOLD FUT 05 JUN 26"
+                      p_underlying_symbol: "GOLD"
+                      p_total_quantity: "1"
+                      p_total_lots: "1"
+                      p_buy_price: "159500.00"
+                      p_sell_price: "159023.00"
+                      p_realized_pl: "-47700.00"
+                      p_commission: "0.00"
+                      p_net_realized_pl: "-47700.00"
+                      p_created_at: "2026-05-22T07:30:03.025Z"
+                      p_updated_at: "2026-05-22T07:30:51.419Z"
+                      deleted_at: null
+                  pagination:
+                    current_page: 1
+                    limit_per_page: 20
+                    has_next_page: false
+                    has_previous_page: false
+                    date_range:
+                      start: "2026-04-27T12:32:43.361Z"
+                      end: "2026-05-27T12:32:43.361Z"
+        "401":
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Invalid token. Please login again."
+                data: null
+        "404":
+          description: Client not found
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Client history records missing or account link invalid."
+                data: null
   /api/v1/client/placeOrder:
     post:
       summary: Place an Order
