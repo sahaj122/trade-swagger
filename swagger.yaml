@@ -3556,6 +3556,155 @@ paths:
                 status: "fail"
                 message: "No client found with the provided ID."
                 data: null
+  /api/v1/dealer/clients/pinned:
+    get:
+      summary: Get all pinned clients
+      description: Retrieves a list of all clients pinned by the dealer along with their balance metrics, custom order indexes, and net positions.
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Pinned client data and positions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            client_id:
+                              type: integer
+                            client_name:
+                              type: string
+                            client_username:
+                              type: string
+                            client_balance:
+                              type: number
+                            net_balance:
+                              type: number
+                            net_pl:
+                              type: number
+                            order_index:
+                              type: integer
+                              description: The display sorting index assigned to this pinned client.
+                            positions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  pos_id:
+                                    type: integer
+                                  client_id:
+                                    type: integer
+                                  pos_instrument_key:
+                                    type: string
+                                  pos_trading_symbol:
+                                    type: string
+                                  pos_underlying_symbol:
+                                    type: string
+                                  pos_net_buy_qty:
+                                    type: string
+                                  pos_net_lots_bought:
+                                    type: string
+                                  pos_net_buy_value:
+                                    type: string
+                                  pos_buy_avg_price:
+                                    type: string
+                                  pos_net_sell_qty:
+                                    type: string
+                                  pos_net_lots_sold:
+                                    type: string
+                                  pos_net_sell_value:
+                                    type: string
+                                  pos_sell_avg_price:
+                                    type: string
+                                  pos_net_status:
+                                    type: string
+                                  pos_commission:
+                                    type: string
+                                  pos_realized_pl:
+                                    type: string
+                                  pos_expiry_date:
+                                    type: string
+                                    format: date-time
+                                  pos_created_at:
+                                    type: string
+                                    format: date-time
+                                  pos_updated_at:
+                                    type: string
+                                    format: date-time
+                                  deleted_at:
+                                    type: string
+                                    nullable: true
+              example:
+                status: "success"
+                message: "Pinned client data and positions retrieved"
+                data:
+                  results:
+                    - client_id: 13
+                      client_name: "Vijay verma"
+                      client_username: "vijay123"
+                      client_balance: 100000
+                      net_balance: 100000
+                      net_pl: 0
+                      order_index: 0
+                      positions:
+                        - pos_id: 57
+                          client_id: 13
+                          pos_instrument_key: "MCX_FO|464150"
+                          pos_trading_symbol: "SILVER FUT 03 JUL 26"
+                          pos_underlying_symbol: "SILVER"
+                          pos_net_buy_qty: "60"
+                          pos_net_lots_bought: "2"
+                          pos_net_buy_value: "16274640.0000"
+                          pos_buy_avg_price: "271244.0000"
+                          pos_net_sell_qty: "30"
+                          pos_net_lots_sold: "1"
+                          pos_net_sell_value: "8134530.0000"
+                          pos_sell_avg_price: "271151.0000"
+                          pos_net_status: "open"
+                          pos_commission: "0.0000"
+                          pos_realized_pl: "-2790.0000"
+                          pos_expiry_date: "2026-07-03T18:29:59.000Z"
+                          pos_created_at: "2026-05-27T11:35:00.538Z"
+                          pos_updated_at: "2026-05-27T11:35:05.095Z"
+                          deleted_at: null
+                    - client_id: 14
+                      client_name: "abhbi"
+                      client_username: "anjd"
+                      client_balance: 0
+                      net_balance: 0
+                      net_pl: 0
+                      order_index: 1
+                      positions: []
+                    - client_id: 17
+                      client_name: "Test Client"
+                      client_username: "testclient123"
+                      client_balance: 0
+                      net_balance: 0
+                      net_pl: 0
+                      order_index: 2
+                      positions: []
+        "401":
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Invalid token. Please login again."
+                data: null
   /api/v1/client/placeOrder:
     post:
       summary: Place an Order
