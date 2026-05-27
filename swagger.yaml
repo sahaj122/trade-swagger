@@ -3240,6 +3240,268 @@ paths:
                     date_range:
                       start: "2026-04-13T18:30:00.000Z"
                       end: "2026-04-24T18:29:59.999Z"
+  /api/v1/dealer/getMultiClientNetPositions:
+    get:
+      summary: Get net positions for multiple clients
+      description: Retrieves a paginated and sorted list of net positions and balances across multiple clients managed by the dealer.
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+          description: Number of client results to return per page.
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - name_asc
+              - name_desc
+              - pl_asc
+              - pl_desc
+              - balance_asc
+              - balance_desc
+            default: pl_asc
+          description: Field and direction to sort the client results by.
+      responses:
+        "200":
+          description: Multi-client net positions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            client_id:
+                              type: integer
+                            client_name:
+                              type: string
+                            client_username:
+                              type: string
+                            client_balance:
+                              type: number
+                            net_balance:
+                              type: number
+                            net_pl:
+                              type: number
+                            positions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  pos_id:
+                                    type: integer
+                                  client_id:
+                                    type: integer
+                                  pos_instrument_key:
+                                    type: string
+                                  pos_trading_symbol:
+                                    type: string
+                                  pos_underlying_symbol:
+                                    type: string
+                                  pos_net_buy_qty:
+                                    type: string
+                                  pos_net_lots_bought:
+                                    type: string
+                                  pos_net_buy_value:
+                                    type: string
+                                  pos_buy_avg_price:
+                                    type: string
+                                  pos_net_sell_qty:
+                                    type: string
+                                  pos_net_lots_sold:
+                                    type: string
+                                  pos_net_sell_value:
+                                    type: string
+                                  pos_sell_avg_price:
+                                    type: string
+                                  pos_net_status:
+                                    type: string
+                                  pos_commission:
+                                    type: string
+                                  pos_realized_pl:
+                                    type: string
+                                  pos_expiry_date:
+                                    type: string
+                                    format: date-time
+                                  pos_created_at:
+                                    type: string
+                                    format: date-time
+                                  pos_updated_at:
+                                    type: string
+                                    format: date-time
+                                  deleted_at:
+                                    type: string
+                                    nullable: true
+                      pagination:
+                        type: object
+                        properties:
+                          total_clients:
+                            type: integer
+                          total_pages:
+                            type: integer
+                          current_page:
+                            type: integer
+                          clients_per_page:
+                            type: integer
+              example:
+                status: "success"
+                message: "Multi-client net positions retrieved"
+                data:
+                  results:
+                    - client_id: 12
+                      client_name: "abhi"
+                      client_username: "abhi123"
+                      client_balance: 0
+                      net_balance: 0
+                      net_pl: 0
+                      positions:
+                        - pos_id: 55
+                          client_id: 12
+                          pos_instrument_key: "MCX_FO|459277"
+                          pos_trading_symbol: "GOLD FUT 05 JUN 26"
+                          pos_underlying_symbol: "GOLD"
+                          pos_net_buy_qty: "2"
+                          pos_net_lots_bought: "2"
+                          pos_net_buy_value: "31778800.0000"
+                          pos_buy_avg_price: "158894.0000"
+                          pos_net_sell_qty: "1"
+                          pos_net_lots_sold: "1"
+                          pos_net_sell_value: "15887000.0000"
+                          pos_sell_avg_price: "158870.0000"
+                          pos_net_status: "open"
+                          pos_commission: "0.0000"
+                          pos_realized_pl: "-2400.0000"
+                          pos_expiry_date: "2026-06-05T18:29:59.000Z"
+                          pos_created_at: "2026-05-27T11:28:22.335Z"
+                          pos_updated_at: "2026-05-27T11:28:31.403Z"
+                          deleted_at: null
+                        - pos_id: 56
+                          client_id: 12
+                          pos_instrument_key: "MCX_FO|464150"
+                          pos_trading_symbol: "SILVER FUT 03 JUL 26"
+                          pos_underlying_symbol: "SILVER"
+                          pos_net_buy_qty: "60"
+                          pos_net_lots_bought: "2"
+                          pos_net_buy_value: "16274640.0000"
+                          pos_buy_avg_price: "271244.0000"
+                          pos_net_sell_qty: "60"
+                          pos_net_lots_sold: "2"
+                          pos_net_sell_value: "16269060.0000"
+                          pos_sell_avg_price: "271151.0000"
+                          pos_net_status: "closed"
+                          pos_commission: "0.0000"
+                          pos_realized_pl: "-5580.0000"
+                          pos_expiry_date: "2026-07-03T18:29:59.000Z"
+                          pos_created_at: "2026-05-27T11:32:34.895Z"
+                          pos_updated_at: "2026-05-27T11:32:45.421Z"
+                          deleted_at: null
+                    - client_id: 13
+                      client_name: "Vijay verma"
+                      client_username: "vijay123"
+                      client_balance: 100000
+                      net_balance: 100000
+                      net_pl: 0
+                      positions:
+                        - pos_id: 58
+                          client_id: 13
+                          pos_instrument_key: "MCX_FO|459277"
+                          pos_trading_symbol: "GOLD FUT 05 JUN 26"
+                          pos_underlying_symbol: "GOLD"
+                          pos_net_buy_qty: "1"
+                          pos_net_lots_bought: "1"
+                          pos_net_buy_value: "15889400.0000"
+                          pos_buy_avg_price: "158894.0000"
+                          pos_net_sell_qty: "1"
+                          pos_net_lots_sold: "1"
+                          pos_net_sell_value: "15887000.0000"
+                          pos_sell_avg_price: "158870.0000"
+                          pos_net_status: "closed"
+                          pos_commission: "0.0000"
+                          pos_realized_pl: "-2400.0000"
+                          pos_expiry_date: "2026-06-05T18:29:59.000Z"
+                          pos_created_at: "2026-05-27T11:35:23.092Z"
+                          pos_updated_at: "2026-05-27T11:35:27.438Z"
+                          deleted_at: null
+                        - pos_id: 57
+                          client_id: 13
+                          pos_instrument_key: "MCX_FO|464150"
+                          pos_trading_symbol: "SILVER FUT 03 JUL 26"
+                          pos_underlying_symbol: "SILVER"
+                          pos_net_buy_qty: "60"
+                          pos_net_lots_bought: "2"
+                          pos_net_buy_value: "16274640.0000"
+                          pos_buy_avg_price: "271244.0000"
+                          pos_net_sell_qty: "30"
+                          pos_net_lots_sold: "1"
+                          pos_net_sell_value: "8134530.0000"
+                          pos_sell_avg_price: "271151.0000"
+                          pos_net_status: "open"
+                          pos_commission: "0.0000"
+                          pos_realized_pl: "-2790.0000"
+                          pos_expiry_date: "2026-07-03T18:29:59.000Z"
+                          pos_created_at: "2026-05-27T11:35:00.538Z"
+                          pos_updated_at: "2026-05-27T11:35:05.095Z"
+                          deleted_at: null
+                    - client_id: 14
+                      client_name: "abhbi"
+                      client_username: "anjd"
+                      client_balance: 0
+                      net_balance: 0
+                      net_pl: 0
+                      positions: []
+                    - client_id: 16
+                      client_name: "abhbi"
+                      client_username: "abhi321"
+                      client_balance: 0
+                      net_balance: 0
+                      net_pl: 0
+                      positions: []
+                    - client_id: 17
+                      client_name: "Test Client"
+                      client_username: "testclient123"
+                      client_balance: 0
+                      net_balance: 0
+                      net_pl: 0
+                      positions: []
+                  pagination:
+                    total_clients: 5
+                    total_pages: 1
+                    current_page: 1
+                    clients_per_page: 10
+        "401":
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Invalid token. Please login again."
+                data: null
   /api/v1/client/placeOrder:
     post:
       summary: Place an Order
