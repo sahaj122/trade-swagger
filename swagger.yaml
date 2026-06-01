@@ -3705,6 +3705,71 @@ paths:
                 status: "fail"
                 message: "Invalid token. Please login again."
                 data: null
+  /api/v1/dealer/getInstrumentRulesSymbol:
+    get:
+      summary: Get all instrument rules symbols
+      description: Retrieves a master list of all trading instruments along with their underlying symbols, names, exchanges, and segment configurations.
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Instrument list fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      length:
+                        type: integer
+                        description: Total count of items available in the instruments array.
+                      instruments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            underlying_symbol:
+                              type: string
+                            name:
+                              type: string
+                            exchange:
+                              type: string
+                            segment:
+                              type: string
+              example:
+                status: "success"
+                message: "Instrment List Fetched Successfully"
+                data:
+                  length: 262
+                  instruments:
+                    - id: 2
+                      underlying_symbol: "INDUSINDBK"
+                      name: "INDUSIND BANK LIMITED"
+                      exchange: "NSE"
+                      segment: "NSE_FO"
+                    - id: 3
+                      underlying_symbol: "NIFTY"
+                      name: "NIFTY"
+                      exchange: "NSE"
+                      segment: "NSE_FO"
+        "401":
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Invalid token. Please login again."
+                data: null
   /api/v1/dealer/getTradeHistory/{client_id}:
     get:
       summary: Fetch trade history of a specific client
