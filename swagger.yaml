@@ -4930,6 +4930,84 @@ paths:
                     date_range:
                       start: "2026-03-10T00:00:00.000Z"
                       end: "2026-03-24T18:29:59.999Z"
+  /api/v1/client/syncContactList:
+    post:
+      summary: Synchronize client contact list
+      description: Bulk uploads an array of device contacts for synchronization and storage purposes.
+      tags:
+        - client
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - contacts
+              properties:
+                contacts:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - name
+                      - phone
+                    properties:
+                      name:
+                        type: string
+                        description: Display name of the contact.
+                      phone:
+                        type: string
+                        description: Phone number string.
+            example:
+              contacts:
+                - name: "Oliver"
+                  phone: "9891719090"
+                - name: "Kevin"
+                  phone: "1231234567"
+                - name: "Akshay"
+                  phone: "8899776655"
+      responses:
+        "200":
+          description: Contacts synced successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      synced_count:
+                        type: integer
+                        description: Total number of records successfully matched or updated.
+              example:
+                status: "success"
+                message: "Contacts synced successfully."
+                data:
+                  synced_count: 3
+        "400":
+          description: Bad Request - Missing mandatory fields or malformed payload
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Invalid payload format. Expected an array of valid contacts."
+                data: null
+        "401":
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Invalid token. Please login again."
+                data: null
   /api/v1/client/getTransactionHistory:
     get:
       summary: Fetch authenticated client transaction history
