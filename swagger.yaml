@@ -5079,6 +5079,93 @@ paths:
                 status: "fail"
                 message: "Invalid token. Please login again."
                 data: null
+  /api/v1/client/getContactList:
+    get:
+      summary: Retrieve client contact list
+      description: Fetches all stored contacts associated with a specific device identifier.
+      tags:
+        - client
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: device_id
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "RJX001"
+          description: The unique hardware or application identifier for the device tracking the contacts.
+      responses:
+        "200":
+          description: Contacts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: integer
+                        description: The total count of matching contacts returned.
+                      contacts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            phone:
+                              type: string
+                            device_id:
+                              type: string
+                            createdAt:
+                              type: string
+                              format: date-time
+              example:
+                status: "success"
+                message: "Contacts retrieved successfully."
+                data:
+                  results: 3
+                  contacts:
+                    - id: 4
+                      name: "Kevin"
+                      phone: "1231234567"
+                      device_id: "RJX001"
+                      createdAt: "2026-06-01T05:44:07.411Z"
+                    - id: 5
+                      name: "Akshay"
+                      phone: "8899776655"
+                      device_id: "RJX001"
+                      createdAt: "2026-06-01T05:44:07.411Z"
+                    - id: 1
+                      name: "Oliver"
+                      phone: "9891719090"
+                      device_id: "RJX001"
+                      createdAt: "2026-06-01T05:42:22.328Z"
+        "400":
+          description: Bad Request - Missing device_id parameter
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Query parameter 'device_id' is required."
+                data: null
+        "401":
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Invalid token. Please login again."
+                data: null
   /api/v1/client/getTransactionHistory:
     get:
       summary: Fetch authenticated client transaction history
