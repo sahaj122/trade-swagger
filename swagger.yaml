@@ -5026,14 +5026,20 @@ paths:
                       phone:
                         type: string
                         description: Phone number string.
+                      device_id:
+                        type: string
+                        description: Device id string
             example:
               contacts:
                 - name: "Oliver"
                   phone: "9891719090"
+                  device_id: "RJX001"
                 - name: "Kevin"
                   phone: "1231234567"
+                  device_id: "RJX001"
                 - name: "Akshay"
                   phone: "8899776655"
+                  device_id: "RJX001"
       responses:
         "200":
           description: Contacts synced successfully
