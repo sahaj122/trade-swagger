@@ -2303,8 +2303,8 @@ paths:
                   force_update: false
   /api/v1/dealer/squareOffPosition/{client_id}:
     post:
-      summary: Square off client position
-      description: Allows a dealer to manually close a client's open position for a specific instrument.
+      summary: Bulk square off client positions
+      description: Allows a dealer to manually close multiple open positions at once for a specific client.
       tags:
         - dealer
       security:
@@ -2315,7 +2315,7 @@ paths:
           required: true
           schema:
             type: integer
-          description: The ID of the client whose position is being squared off.
+          description: The ID of the client whose positions are being squared off.
       requestBody:
         required: true
         content:
@@ -2323,63 +2323,31 @@ paths:
             schema:
               type: object
               required:
-                - instrument_key
-                - lots_requested
+                - positions
               properties:
-                instrument_key:
-                  type: string
-                  description: Unique key for the instrument (e.g., MCX_FO|472789).
-                lots_requested:
-                  type: integer
-                  description: Number of lots to square off.
-            example:
-              instrument_key: "MCX_FO|472789"
-              lots_requested: 1
-      responses:
-        '200':
-          description: Client position squared off successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  message:
-                    type: string
-                  order:
+                positions:
+                  type: array
+                  items:
                     type: object
+                    required:
+                      - instrument_key
+                      - lots_requested
                     properties:
-                      order_id:
-                        type: integer
-                      client_id:
-                        type: string
                       instrument_key:
                         type: string
-                      side:
-                        type: string
-                      total_lots:
+                        description: Unique key for the instrument (e.g., MCX_FO|466583).
+                      lots_requested:
                         type: integer
-                      traded_price:
-                        type: number
-                      status:
-                        type: string
-                      message:
-                        type: string
-              example:
-                status: "success"
-                message: "Client position successfully squared off by dealer."
-                order:
-                  order_id: 68
-                  client_id: "13"
-                  instrument_key: "MCX_FO|472789"
-                  side: "SELL"
-                  total_lots: 1
-                  traded_price: 100
-                  status: "EXECUTED"
-                  message: "Position closed by admin/dealer"
-        '400':
-          description: Failed to square off (e.g., no open position)
+                        description: Number of lots to square off.
+            example:
+              positions:
+                - instrument_key: "MCX_FO|466583"
+                  lots_requested: 1
+                - instrument_key: "MCX_FO|464150"
+                  lots_requested: 1
+      responses:
+        '200':
+          description: Bulk square-off requests processed successfully
           content:
             application/json:
               schema:
@@ -2391,10 +2359,75 @@ paths:
                     type: string
                   data:
                     type: object
-                    nullable: true
+                    properties:
+                      successful:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            instrument_key:
+                              type: string
+                            status:
+                              type: string
+                            data:
+                              type: object
+                              properties:
+                                order_id:
+                                  type: integer
+                                client_id:
+                                  type: string
+                                instrument_key:
+                                  type: string
+                                side:
+                                  type: string
+                                total_lots:
+                                  type: integer
+                                traded_price:
+                                  type: number
+                                status:
+                                  type: string
+                                message:
+                                  type: string
+                      failed:
+                        type: array
+                        items:
+                          type: object
+                          description: Array holding execution metrics for failed square offs.
+              example:
+                status: "success"
+                message: "Processed 2 square-off requests."
+                data:
+                  successful:
+                    - instrument_key: "MCX_FO|466583"
+                      status: "success"
+                      data:
+                        order_id: 254
+                        client_id: "12"
+                        instrument_key: "MCX_FO|466583"
+                        side: "BUY"
+                        total_lots: 1
+                        traded_price: 154950
+                        status: "EXECUTED"
+                        message: "Position closed by admin/dealer"
+                    - instrument_key: "MCX_FO|464150"
+                      status: "success"
+                      data:
+                        order_id: 255
+                        client_id: "12"
+                        instrument_key: "MCX_FO|464150"
+                        side: "SELL"
+                        total_lots: 1
+                        traded_price: 247378
+                        status: "EXECUTED"
+                        message: "Position closed by admin/dealer"
+                  failed: []
+        '401':
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
               example:
                 status: "fail"
-                message: "Client has no open position for this instrument to square off."
+                message: "Invalid token. Please login again."
                 data: null
   /api/v1/dealer/deleteClientPosition/{p_id}:
     delete:
