@@ -2079,7 +2079,7 @@ paths:
                                 enabled: true
                   stale_settings:
                     - "MCX_FUTURES.symbols.CRUDEOIL.types.Monthly.DECEMBER_2025"
-    post:
+    put:
       summary: save script management settings
       tags:
         - dealer
