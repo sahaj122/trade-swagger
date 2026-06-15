@@ -3804,6 +3804,111 @@ paths:
                 status: "fail"
                 message: "Invalid token. Please login again."
                 data: null
+  /api/v1/dealer/searchInstruments:
+    get:
+      summary: Search market instruments for dealers
+      description: Searches for active trading instruments based on a text query string and filters them across a comma-separated list of target exchanges.
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "NIFTY 23000"
+          description: The search query string (e.g., token name, strike price, or symbol).
+        - name: exchanges
+          in: query
+          required: true
+          schema:
+            type: string
+          example: "MCX_FUTURE,NSE_FUTURE,NSE_OPTION"
+          description: Comma-separated list of exchanges to filter the market search by.
+      responses:
+        "200":
+          description: Market instruments filtered and retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      instruments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: Unique market execution identifier format.
+                            ltp:
+                              type: string
+                              description: Last traded price.
+                            lot_size:
+                              type: string
+                            qty_multiplier:
+                              type: string
+                            segment:
+                              type: string
+                            trading_symbol:
+                              type: string
+                            underlying_symbol:
+                              type: string
+                            weekly:
+                              type: string
+                            exchangeType:
+                              type: string
+                            instrumentType:
+                              type: string
+                            expiry_date:
+                              type: string
+                              description: Unix epoch timestamp for contract expiry.
+                            currentTs:
+                              type: string
+                              description: Microsecond precision execution timestamp.
+                            asset_type:
+                              type: string
+                            prevClose:
+                              type: string
+                            instrument_key:
+                              type: string
+              example:
+                status: "success"
+                message: "Instruments fetched successfully"
+                data:
+                  instruments:
+                    - id: "market:NSE_FO|56276"
+                      ltp: "432.5"
+                      lot_size: "65"
+                      qty_multiplier: "1"
+                      segment: "NSE_FO"
+                      trading_symbol: "NIFTY 23000 CE 23 JUN 26"
+                      underlying_symbol: "NIFTY"
+                      weekly: "true"
+                      exchangeType: "NSE_FO"
+                      instrumentType: "CE"
+                      expiry_date: "1782239399000"
+                      currentTs: "1781159464046000"
+                      asset_type: "INDEX"
+                      prevClose: "396.3"
+                      instrument_key: "NSE_FO|56276"
+        "401":
+          description: Unauthorized - Invalid or expired token
+          content:
+            application/json:
+              example:
+                status: "fail"
+                message: "Invalid token. Please login again."
+                data: null
   /api/v1/dealer/getTradeHistory/{client_id}:
     get:
       summary: Fetch trade history of a specific client
