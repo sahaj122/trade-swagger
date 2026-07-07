@@ -1460,6 +1460,143 @@ paths:
                   client_username: "abhi321"
                   client_contact: "9876543210"
                   deleted_at: null
+  /api/v1/dealer/getSpecificClientDetails/{client_id}:
+    get:
+      summary: Get specific client details
+      tags:
+        - dealer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: client_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the client to retrieve.
+      responses:
+        "200":
+          description: Client details fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      client:
+                        type: object
+                        properties:
+                          client_id:
+                            type: integer
+                          client_name:
+                            type: string
+                          client_username:
+                            type: string
+                          client_password:
+                            type: string
+                            format: password
+                          client_contact:
+                            type: string
+                          client_balance:
+                            type: integer
+                          client_status:
+                            type: boolean
+                          total_max_lots_allowed_future:
+                            type: integer
+                          total_standing_lots_future:
+                            type: integer
+                          total_max_lots_allowed_options:
+                            type: integer
+                          total_standing_lots_options:
+                            type: integer
+                          auto_square_off_balance:
+                            type: integer
+                          jobbing_allowed:
+                            type: boolean
+                          jobbing_time_position:
+                            type: integer
+                          commission_per_crore_mcx:
+                            type: integer
+                          commission_per_crore_nse:
+                            type: integer
+                          commission_per_lot:
+                            type: integer
+                          commission_per_lot_ncd:
+                            type: integer
+                          allow_stop_loss_above_high_low:
+                            type: boolean
+                          allow_limit_orders:
+                            type: boolean
+                          allow_limit_orders_above_high_low:
+                            type: boolean
+                          allow_position_carry_nse:
+                            type: boolean
+                          allow_position_carry_mcx:
+                            type: boolean
+                          allow_position_carry_nse_option:
+                            type: boolean
+                          allow_position_carry_mcx_option:
+                            type: boolean
+                          allow_position_carry_ncd:
+                            type: boolean
+                          opition_selling_allowed:
+                            type: boolean
+                          client_dealer_id:
+                            type: integer
+                          c_created_at:
+                            type: string
+                            format: date-time
+                          c_updated_at:
+                            type: string
+                            format: date-time
+                          deleted_at:
+                            type: string
+                            nullable: true
+                          role_id:
+                            type: integer
+              example:
+                status: "success"
+                message: "Client details fetched successfully"
+                data:
+                  client:
+                    client_id: 13
+                    client_name: "Vijay verma"
+                    client_username: "vijay123"
+                    client_password: "123123"
+                    client_contact: "9876543210"
+                    client_balance: 100000
+                    client_status: true
+                    total_max_lots_allowed_future: 30
+                    total_standing_lots_future: 1
+                    total_max_lots_allowed_options: 100
+                    total_standing_lots_options: 0
+                    auto_square_off_balance: -5000
+                    jobbing_allowed: false
+                    jobbing_time_position: 0
+                    commission_per_crore_mcx: 0
+                    commission_per_crore_nse: 0
+                    commission_per_lot: 20
+                    commission_per_lot_ncd: 50
+                    allow_stop_loss_above_high_low: true
+                    allow_limit_orders: true
+                    allow_limit_orders_above_high_low: true
+                    allow_position_carry_nse: true
+                    allow_position_carry_mcx: true
+                    allow_position_carry_nse_option: true
+                    allow_position_carry_mcx_option: true
+                    allow_position_carry_ncd: true
+                    opition_selling_allowed: true
+                    client_dealer_id: 1
+                    c_created_at: "2026-03-21T17:17:39.654Z"
+                    c_updated_at: "2026-05-27T11:35:27.441Z"
+                    deleted_at: null
+                    role_id: 3
   /api/v1/dealer/updateClientDetails/{username}:
     patch:
       summary: update client details
