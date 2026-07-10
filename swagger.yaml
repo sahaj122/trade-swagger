@@ -2672,7 +2672,7 @@ paths:
                 message: "Position is not deleted. Cannot restore."
                 data: null
   /api/v1/dealer/reopenClosedPosition/{p_id}:
-    post:
+    patch:
       summary: Reopen a closed position
       description: "Allows a dealer to manually reopen a previously closed or squared-off position, reversing the execution state."
       tags:
